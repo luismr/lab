@@ -1,12 +1,10 @@
 package spring;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +20,21 @@ import data.ClienteRowMapper;
 public class MySQLSpringJdbc {
 
 	@Autowired
-	private DataSource dataSource;
-	
 	private JdbcTemplate jdbcTemplate;
 	
-	@Before
-	public void setUp() throws Exception {
-		jdbcTemplate = new JdbcTemplate(dataSource);
+	@Test
+	public void insertTest() {
+		Cliente cliente = new Cliente(4, "Ana Caroline");
+		int rows = jdbcTemplate.update("INSERT INTO customers VALUES (?, ?)", 
+				new Object[] {cliente.getId(), cliente.getNome()});
+		
+		assertTrue(rows > 0);
 	}
 	
 	@Test
 	public void selectTest() {
-		List<Cliente> clientes = jdbcTemplate.query("SELECT * FROM customers", new ClienteRowMapper());
+		List<Cliente> clientes = jdbcTemplate.query("SELECT * FROM customers", 
+				new ClienteRowMapper());
 		
 		for (Cliente cliente : clientes) {
 			System.out.println(cliente);
@@ -42,13 +43,4 @@ public class MySQLSpringJdbc {
 		assertNotNull(clientes);
 		assertTrue(clientes.size() > 0);
 	}
-	
-	@Test
-	public void insertTest() {
-		Cliente cliente = new Cliente(4, "Ana Caroline");
-		int rows = jdbcTemplate.update("INSERT INTO customers VALUES (?, ?)", new Object[] {cliente.getId(), cliente.getNome()});
-		
-		assertTrue(rows > 0);
-	}
-	
 }

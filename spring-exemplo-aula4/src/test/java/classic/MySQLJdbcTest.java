@@ -17,7 +17,6 @@ public class MySQLJdbcTest {
 
 	private Connection connection;
 	
-	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
