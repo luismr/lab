@@ -1,6 +1,7 @@
 package wifi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import wifi.dao.CursoDAO;
@@ -8,7 +9,6 @@ import wifi.dao.DAOException;
 import wifi.dao.MatriculaDAO;
 import wifi.data.Matricula;
 
-@Transactional
 public class AcademicoService {
 
 	@Autowired
@@ -17,7 +17,8 @@ public class AcademicoService {
 	@Autowired
 	private MatriculaDAO matriculaDAO;
 	
-	public Matricula createMatriculaAndCursoAndOrAluno(final Matricula m) throws ServiceException {
+	@Transactional(propagation=Propagation.MANDATORY, rollbackFor={DAOException.class, ServiceException.class})
+	public Matricula createMatriculaAndCursoAndOrAluno(final Matricula m) throws ServiceException, DAOException {
 		if (m == null) {
 			throw new ServiceException("m == null");
 		} else if (m.getAluno() == null) {
@@ -26,20 +27,16 @@ public class AcademicoService {
 			throw new ServiceException("m.curso == null");
 		}
 
-		try {
-			if (cursoDAO.read(m.getCurso()) == null) {
-				cursoDAO.create(m.getCurso());
-			}
-			
-			//FIXME Pelo amor de Deus implementar o AlunoDAO
-			if (!true) {
-				//alunoDAO.create(m.getAluno());
-			}
-			
-			matriculaDAO.create(m);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
+		if (cursoDAO.read(m.getCurso()) == null) {
+			cursoDAO.create(m.getCurso());
 		}
+		
+		//FIXME Pelo amor de Deus implementar o AlunoDAO
+		if (!true) {
+			//alunoDAO.create(m.getAluno());
+		}
+		
+		matriculaDAO.create(m);
 		
 		return m;
 	}

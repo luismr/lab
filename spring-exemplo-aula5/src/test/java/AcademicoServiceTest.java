@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import wifi.dao.DAOException;
 import wifi.data.Aluno;
 import wifi.data.Curso;
 import wifi.data.Matricula;
@@ -31,7 +32,7 @@ public class AcademicoServiceTest {
 	}
 
 	@Test
-	public void createMatriculaWithPalaTest() throws ServiceException {
+	public void createMatriculaWithPalaTest() throws ServiceException, DAOException {
 		Curso c = new Curso(3, "Nutrição");
 		Aluno a = new Aluno(null, "Gabriel Coutinho");
 

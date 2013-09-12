@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-	<util:properties id="databaseParams">
+<!-- 	<util:properties id="databaseParams">
 		<prop key="database.driver">com.mysql.jdbc.Driver</prop>
 		<prop key="database.url">jdbc:mysql://localhost:3306/wifi</prop>
 		<prop key="database.user">wifi</prop>
 		<prop key="database.passwd">wifi</prop>
 	</util:properties>
+ -->
+ 
+	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/wifi?relaxAutoCommit=true" />
+		<property name="username" value="wifi" />
+		<property name="password" value="wifi" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="false" />
 
 	<bean id="cursoDAO" class="wifi.dao.CursoJdbcDAO">
 		<constructor-arg ref="dataSource" />
@@ -23,20 +41,4 @@
 	</bean>
 
 	<bean id="academicoService" class="wifi.service.AcademicoService" />
-
-	<bean id="dataSource" destroy-method="close"
-		class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/wifi" />
-		<property name="username" value="wifi" />
-		<property name="password" value="wifi" />
-	</bean>
-	 
-	<bean id="transactionManager" 
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
-		<property name="dataSource" ref="dataSource" /> 
-	</bean>
-		
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>	 
-
 </beans>
