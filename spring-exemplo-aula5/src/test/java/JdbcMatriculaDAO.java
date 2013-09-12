@@ -1,42 +1,32 @@
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import wifi.dao.CursoDAO;
 import wifi.dao.DAOException;
+import wifi.dao.MatriculaDAO;
+import wifi.data.Aluno;
 import wifi.data.Curso;
+import wifi.data.Matricula;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/applicationContext.xml"})
-public class JdbcCursoDAOTest {
+public class JdbcMatriculaDAO {
 
 	@Autowired
-	private CursoDAO cursoDAO;
-	
-	@Test
-	public void listAllTest() throws DAOException {
-		List<Curso> cursos = cursoDAO.listAll();
-		assertNotNull(cursos);
-		assertTrue(cursos.size() > 0);
-		
-		for (Curso curso : cursos) {
-			System.out.println(curso);
-		}
-	}
+	MatriculaDAO matriculaDAO;
 	
 	@Test
 	public void createTest() throws DAOException {
-		Curso c = new Curso();
-		c.setId(2);
-		c.setNome("Engenharia Elétrica");
+		Curso c = new Curso(1, "Ciências da Computação");
+		Aluno a = new Aluno(1, "Luis Machado Reis");
 		
-		cursoDAO.create(c);
+		Matricula m = new Matricula(a, c);
+		
+		matriculaDAO.create(m);
 	}
 
 }

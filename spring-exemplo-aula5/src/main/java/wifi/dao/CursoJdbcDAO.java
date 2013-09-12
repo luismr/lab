@@ -1,14 +1,21 @@
 package wifi.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
 import wifi.data.Curso;
 
 public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
+	
+	public CursoJdbcDAO(DataSource datasource) throws DAOException {
+		super(datasource);
+	}
 
 	public CursoJdbcDAO(Properties params) throws DAOException {
 		super(params);
@@ -16,12 +23,38 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 
 	@Override
 	public void create(Curso c) throws DAOException {
-
+		try {
+			PreparedStatement stmt = 
+					createPreparedStatement("INSERT INTO curso VALUES (?, ?)");
+			stmt.setInt(1, c.getId());
+			stmt.setString(2, c.getNome());
+			
+			stmt.execute();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	public Curso read(Curso c) throws DAOException {
-		return null;
+		Curso curso = null;
+		
+		try {
+			PreparedStatement stmt =
+					createPreparedStatement("SELECT * FROM curso WHERE id = ?");
+			stmt.setInt(1, c.getId());
+			
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				curso = new Curso();
+				curso.setId(rs.getInt("id"));
+				curso.setNome(rs.getString("nome"));
+			} 
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+		
+		return curso;
 	}
 
 	@Override

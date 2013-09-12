@@ -2,9 +2,9 @@ package wifi.dao;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import wifi.data.Curso;
+import wifi.data.Matricula;
 
 @Transactional
-public interface CursoDAO extends DAO<Curso> {
+public interface MatriculaDAO extends DAO<Matricula> {
 
 }
