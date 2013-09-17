@@ -15,7 +15,7 @@ public abstract class AbstractJdbcDAO {
 	private DataSource datasource = null;
 	private Properties databaseParams = null;
 	
-	public AbstractJdbcDAO(Properties params) throws DAOException {
+	public AbstractJdbcDAO(Properties params) {
 		this.databaseParams = params;
 		
 		try {
@@ -26,7 +26,7 @@ public abstract class AbstractJdbcDAO {
 		}
 	}
 
-	public AbstractJdbcDAO(DataSource datasource) throws DAOException {
+	public AbstractJdbcDAO(DataSource datasource) {
 		this.datasource = datasource;
 
 		try {

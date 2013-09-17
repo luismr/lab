@@ -9,6 +9,9 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import wifi.data.Curso;
 
 public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
@@ -22,6 +25,7 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void create(Curso c) throws DAOException {
 		try {
 			PreparedStatement stmt = 
@@ -36,6 +40,7 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public Curso read(Curso c) throws DAOException {
 		Curso curso = null;
 		

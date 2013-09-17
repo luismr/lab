@@ -16,8 +16,8 @@ public class AcademicoService {
 	
 	@Autowired
 	private MatriculaDAO matriculaDAO;
-	
-	@Transactional(propagation=Propagation.MANDATORY, rollbackFor={DAOException.class, ServiceException.class})
+
+	@Transactional(propagation=Propagation.REQUIRED)
 	public Matricula createMatriculaAndCursoAndOrAluno(final Matricula m) throws ServiceException, DAOException {
 		if (m == null) {
 			throw new ServiceException("m == null");
@@ -41,6 +41,7 @@ public class AcademicoService {
 		return m;
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public Matricula createMatricula(final Matricula m) throws ServiceException {
 		if (m == null) {
 			throw new ServiceException("m == null");

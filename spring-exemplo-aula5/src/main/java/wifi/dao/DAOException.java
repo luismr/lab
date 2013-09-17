@@ -1,6 +1,6 @@
 package wifi.dao;
 
-public class DAOException extends Exception {
+public class DAOException extends RuntimeException {
 
 	public DAOException(Exception e) {
 		super(e);
