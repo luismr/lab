@@ -3,9 +3,14 @@
  */
 package wifi.model.data;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -23,6 +28,12 @@ public class Curso {
 	
 	@Column(name="nome", nullable=false)
 	private String nome;
+	
+	@OneToMany(mappedBy="curso", 
+			targetEntity=Matricula.class, 
+			fetch=FetchType.LAZY, 
+			cascade=CascadeType.ALL)
+	private List<Matricula> matriculas;
 	
 	public Curso() {}
 	
@@ -47,11 +58,21 @@ public class Curso {
 		this.nome = nome;
 	}
 
+	public List<Matricula> getMatriculas() {
+		return matriculas;
+	}
+
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((matriculas == null) ? 0 : matriculas.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
@@ -70,6 +91,11 @@ public class Curso {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (matriculas == null) {
+			if (other.matriculas != null)
+				return false;
+		} else if (!matriculas.equals(other.matriculas))
+			return false;
 		if (nome == null) {
 			if (other.nome != null)
 				return false;
@@ -80,7 +106,9 @@ public class Curso {
 
 	@Override
 	public String toString() {
-		return "Curso [id=" + id + ", nome=" + nome + "]";
+		return "Curso [id=" + id + ", nome=" + nome + ", matriculas="
+				+ matriculas + "]";
 	}
+
 	
 }
