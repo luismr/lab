@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,10 @@ public class MatriculaJdbcDAO extends AbstractJdbcDAO implements MatriculaDAO {
 
 	public MatriculaJdbcDAO(DataSource datasource) {
 		super(datasource);
+	}
+
+	public MatriculaJdbcDAO(DataSourceTransactionManager manager) {
+		super(manager);
 	}
 
 	public MatriculaJdbcDAO(Properties params) {

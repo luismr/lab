@@ -21,8 +21,6 @@
 		<prop key="database.user">wifi</prop>
 		<prop key="database.passwd">wifi</prop>
 	</util:properties>
- -->
- 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/wifi" />
@@ -30,17 +28,30 @@
 		<property name="password" value="wifi" />
 	</bean>
 
+ -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/wifi" />
+		<property name="username" value="wifi" />
+		<property name="password" value="wifi" />
+	</bean>
+	 
+ 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 	<bean id="cursoDAO" class="wifi.dao.CursoJdbcDAO">
-		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="jdbcTemplate" />
 	</bean>
 
 	<bean id="matriculaDAO" class="wifi.dao.MatriculaJdbcDAO">
-		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="jdbcTemplate" />
 	</bean>
 
 	<bean id="academicoService" class="wifi.service.AcademicoService" />

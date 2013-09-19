@@ -9,10 +9,13 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
 public abstract class AbstractJdbcDAO {
 
 	private Connection connection = null;
 	private DataSource datasource = null;
+	private DataSourceTransactionManager manager = null;
 	private Properties databaseParams = null;
 	
 	public AbstractJdbcDAO(Properties params) {
@@ -36,6 +39,16 @@ public abstract class AbstractJdbcDAO {
 		}
 	}
 	
+	public AbstractJdbcDAO(DataSourceTransactionManager manager) {
+		this.manager = manager;
+		
+		try {
+			setupConnection();
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}
+	}
+	
 	protected Statement createStatement() throws SQLException {
 		return connection.createStatement();
 	}
@@ -45,14 +58,17 @@ public abstract class AbstractJdbcDAO {
 	}
 
 	private void setupConnection() throws SQLException {
-		if (datasource == null) {
+		if (manager != null) {
+			datasource = manager.getDataSource();
+			connection = datasource.getConnection();
+		} else if (datasource != null) {
+			connection = datasource.getConnection();
+		} else {
 			String url = databaseParams.getProperty("database.url");
 			String user = databaseParams.getProperty("database.user");
 			String passwd = databaseParams.getProperty("database.passwd");
 			
 			connection = DriverManager.getConnection(url, user, passwd);
-		} else {
-			connection = datasource.getConnection();
 		}
 	}
 

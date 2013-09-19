@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import wifi.dao.CursoDAO;
 import wifi.dao.DAOException;
 import wifi.dao.MatriculaDAO;
+import wifi.data.Curso;
 import wifi.data.Matricula;
 
 public class AcademicoService {
@@ -32,13 +33,19 @@ public class AcademicoService {
 		}
 		
 		//FIXME Pelo amor de Deus implementar o AlunoDAO
-		if (!true) {
-			//alunoDAO.create(m.getAluno());
-		}
+//		if (!true) {
+//			//alunoDAO.create(m.getAluno());
+//		}
 		
 		matriculaDAO.create(m);
 		
 		return m;
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public Curso createCurso(final Curso c) {
+		cursoDAO.create(c);
+		return c;
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -57,9 +64,9 @@ public class AcademicoService {
 			}
 			
 			//FIXME Pelo amor de Deus implementar o AlunoDAO
-			if (!true) {
-				throw new ServiceException("m.aluno não existe!");
-			}
+//			if (!true) {
+//				throw new ServiceException("m.aluno não existe!");
+//			}
 			
 			matriculaDAO.create(m);
 		} catch (DAOException e) {

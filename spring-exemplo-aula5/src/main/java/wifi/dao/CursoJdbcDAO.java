@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,17 +17,21 @@ import wifi.data.Curso;
 
 public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 	
-	public CursoJdbcDAO(DataSource datasource) throws DAOException {
+	public CursoJdbcDAO(DataSource datasource) {
 		super(datasource);
 	}
 
-	public CursoJdbcDAO(Properties params) throws DAOException {
+	public CursoJdbcDAO(DataSourceTransactionManager manager) {
+		super(manager);
+	}
+
+	public CursoJdbcDAO(Properties params) {
 		super(params);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void create(Curso c) throws DAOException {
+	public void create(Curso c) {
 		try {
 			PreparedStatement stmt = 
 					createPreparedStatement("INSERT INTO curso VALUES (?, ?)");
@@ -35,13 +40,13 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 			
 			stmt.execute();
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public Curso read(Curso c) throws DAOException {
+	public Curso read(Curso c) {
 		Curso curso = null;
 		
 		try {
@@ -56,24 +61,24 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 				curso.setNome(rs.getString("nome"));
 			} 
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new RuntimeException(e);
 		}
 		
 		return curso;
 	}
 
 	@Override
-	public Curso update(Curso c) throws DAOException {
+	public Curso update(Curso c) {
 		return null;
 	}
 
 	@Override
-	public void delete(Curso c) throws DAOException {
+	public void delete(Curso c) {
 
 	}
 
 	@Override
-	public List<Curso> listAll() throws DAOException {
+	public List<Curso> listAll() {
 		List<Curso> cursos = new ArrayList<Curso>();
 		
 		try {
@@ -86,7 +91,7 @@ public class CursoJdbcDAO extends AbstractJdbcDAO implements CursoDAO {
 				cursos.add(c);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new RuntimeException(e);
 		}
 		
 		return cursos;
