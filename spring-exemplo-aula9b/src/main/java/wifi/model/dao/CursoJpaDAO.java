@@ -15,7 +15,7 @@ import wifi.model.data.Curso;
 public class CursoJpaDAO implements DAO<Curso> {
 	
 	@PersistenceContext
-	EntityManager manager;
+	private EntityManager manager;
 	
 	@Override
 	public void create(Curso t) {

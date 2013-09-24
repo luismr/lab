@@ -3,6 +3,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import javax.swing.text.MaskFormatter;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +13,29 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import wifi.model.dao.DAO;
-import wifi.model.data.Curso;
+import wifi.model.data.Matricula;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/applicationContext.xml"})
-public class CursoJpaDAOTest {
+public class MatriculaJpaDAOTest {
 
 	@Autowired
-	private DAO<Curso> cursoJpaDAO;
-
+	private DAO<Matricula> matriculaJpaDAO;
+	
 	@Test
-	@Transactional
+	@Transactional(readOnly=true)
 	public void listAllTest() {
-		List<Curso> cursos = cursoJpaDAO.listAll();
-		assertNotNull(cursos);
-		assertTrue(cursos.size() > 0);
+		List<Matricula> matriculas = matriculaJpaDAO.listAll();
+		assertNotNull(matriculas);
+		assertTrue(matriculas.size() > 0);
+
+//		for (Matricula m : matriculas) {
+//			System.out.println(m.getAlunoId());
+//			System.out.println(m.getCursoId());
+//			System.out.println("----------------------");
+//		}
 		
-		System.out.println(cursos);
+		System.out.println(matriculas);
 	}
 
 }
