@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ShowMessageController {
-
+	
 	@RequestMapping("/showMessage.html")
 	public ModelAndView execute() {
 		System.out.println("Executando o Controlador ShowMessageController");
@@ -16,5 +16,4 @@ public class ShowMessageController {
 		
 		return mv;
 	}
-	
 }
