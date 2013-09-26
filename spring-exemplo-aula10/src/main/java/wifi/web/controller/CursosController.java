@@ -1,8 +1,11 @@
 package wifi.web.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -74,10 +77,12 @@ public class CursosController {
 	
 	@Transactional
 	@RequestMapping("/save/{action}")
-	public ModelAndView save(Curso curso, @PathVariable String action) {
+	public ModelAndView save(@PathVariable String action, @Valid Curso curso, BindingResult bind) {
 		Message msg = null;
 		
-		if ("add".equals(action)) {
+		if (bind.hasFieldErrors()) {
+			msg = new Message(MessageType.ERROR, "Curso informado é inválido para esta operação!");
+		} else if ("add".equals(action)) {
 			cursoJpaDAO.create(curso);
 			msg = new Message(MessageType.INFO, "Curso incluido com sucesso!");
 		} else if ("edit".equals(action)) {

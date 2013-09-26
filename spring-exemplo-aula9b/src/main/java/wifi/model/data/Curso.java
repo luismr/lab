@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -24,9 +26,11 @@ public class Curso {
 
 	@Id
 	@Column(name="id", nullable=false)
+	@NotNull
 	private Integer id;
 	
 	@Column(name="nome", nullable=false)
+	@NotNull @Size(max=40)
 	private String nome;
 	
 	@OneToMany(mappedBy="curso", 
