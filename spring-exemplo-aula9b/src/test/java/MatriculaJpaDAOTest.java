@@ -16,7 +16,7 @@ import wifi.model.dao.DAO;
 import wifi.model.data.Matricula;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/applicationContext.xml"})
+@ContextConfiguration({"/ctx-exemplo-aula9b.xml"})
 public class MatriculaJpaDAOTest {
 
 	@Autowired
