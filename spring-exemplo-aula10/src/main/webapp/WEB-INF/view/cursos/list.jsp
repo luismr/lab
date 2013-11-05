@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" 
            uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
     
 <html>
 	<head>
@@ -19,6 +20,9 @@
 	<body>
 		<h2>Cursos</h2>
 		<hr>
+		<sec:authorize ifAnyGranted="ROLE_ADMIN">
+			<h3>Olá Patrão!</h3>
+		</sec:authorize>		
 		<table>
 			<tr>
 				<td>Id</td>
@@ -36,15 +40,19 @@
 						<c:out value="${alunos}" />
 					</td>
 					<td>
-						<a href="${urlEdit}/${curso.id}">Editar</a>
-						&nbsp;
-						<a href="${urlDelete}/${curso.id}">Excluir</a>
+						<sec:authorize ifAnyGranted="ROLE_ADMIN">
+							<a href="${urlEdit}/${curso.id}">Editar</a>
+							&nbsp;
+							<a href="${urlDelete}/${curso.id}">Excluir</a>
+						</sec:authorize>
 					</td>
 				</tr>			
 			</c:forEach>
 			<tr>
 				<td colspan="4">
-					<a href="${urlAdd}">Incluir</a>
+					<sec:authorize ifAnyGranted="ROLE_ADMIN">
+						<a href="${urlAdd}">Incluir</a>
+					</sec:authorize>
 					<a href="${urlLogout}">Logout</a>
 				</td>
 			</tr>

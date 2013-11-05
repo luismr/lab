@@ -10,7 +10,7 @@
         <intercept-url pattern="/login" access="permitAll" />
         <intercept-url pattern="/logout" access="permitAll" />
         <intercept-url pattern="/denied" access="permitAll" />
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
         <form-login login-page="/login" default-target-url="/cursos/list" authentication-failure-url="/denied" />
         <logout logout-success-url="/logout" />
     </http>
@@ -19,8 +19,11 @@
         <authentication-provider>
             <user-service>
                 <user name="user" password="password" authorities="ROLE_USER" />
+                <user name="admin" password="password" authorities="ROLE_ADMIN" />
             </user-service>
         </authentication-provider>
     </authentication-manager>
 
+	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+	
 </beans:beans>

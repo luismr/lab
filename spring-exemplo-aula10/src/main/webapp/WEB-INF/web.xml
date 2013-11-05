@@ -12,9 +12,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:spring/application-security.xml
         	classpath:spring/application-config.xml
         	classpath:ctx-exemplo-aula9b.xml
+			classpath:spring/application-security.xml
         </param-value>
 	</context-param>
 
