@@ -21,6 +21,7 @@
 
 		<!-- Spring -->
 		<spring-framework.version>3.2.3.RELEASE</spring-framework.version>
+		<spring-security.version>3.1.4.RELEASE</spring-security.version>
 
 		<!-- Hibernate / JPA -->
 		<hibernate.version>4.2.1.Final</hibernate.version>
@@ -50,6 +51,36 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- Other Web dependencies -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

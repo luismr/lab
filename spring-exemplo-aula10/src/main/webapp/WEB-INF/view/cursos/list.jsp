@@ -14,6 +14,7 @@
 	<c:url value="/cursos/edit" var="urlEdit" />
 	<c:url value="/cursos/delete" var="urlDelete" />
 	<c:url value="/cursos/add" var="urlAdd" />
+	<c:url value="/logout" var="urlLogout" />
 			
 	<body>
 		<h2>Cursos</h2>
@@ -44,6 +45,7 @@
 			<tr>
 				<td colspan="4">
 					<a href="${urlAdd}">Incluir</a>
+					<a href="${urlLogout}">Logout</a>
 				</td>
 			</tr>
 		</table>

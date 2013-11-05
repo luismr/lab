@@ -8,10 +8,11 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Welcome</title>
+		<title>Acesso Negado</title>
 	</head> 
 	<body>
-		<c:url value="/cursos/list" var="messageUrl" />
-		<a href="${messageUrl}">Click to enter</a>
+		<h1>Acesso Negado!</h1>
+		<c:url value="/login" var="login" />
+		<a href="${login}">Voltar</a>
 	</body>
 </html>
