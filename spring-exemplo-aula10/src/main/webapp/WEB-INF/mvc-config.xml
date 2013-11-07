@@ -24,5 +24,6 @@
 	</bean>
 	
 	<bean id="loginLogger" class="wifi.web.aspects.LoginLogger" />
+	<bean id="cursosLogger" class="wifi.web.aspects.CursosLogger" />
 
 </beans>
