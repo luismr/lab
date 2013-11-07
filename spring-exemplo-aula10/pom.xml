@@ -23,6 +23,9 @@
 		<spring-framework.version>3.2.3.RELEASE</spring-framework.version>
 		<spring-security.version>3.1.4.RELEASE</spring-security.version>
 
+		<!-- AspectJ -->
+		<aspectj.version>1.7.4</aspectj.version>
+		
 		<!-- Hibernate / JPA -->
 		<hibernate.version>4.2.1.Final</hibernate.version>
 
@@ -80,6 +83,25 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		
+		<!-- Spring AOP + AspectJ -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+ 
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+ 
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>		
 		
 		<!-- Other Web dependencies -->
 		<dependency>

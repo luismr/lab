@@ -3,7 +3,6 @@ package wifi.web.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -30,7 +29,6 @@ public class CursosController {
 		return mv;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView add() {
 		ModelAndView mv = new ModelAndView("cursos/form");
@@ -39,7 +37,6 @@ public class CursosController {
 		return mv;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit/{id}")
 	public ModelAndView edit(@PathVariable Integer id) {
 		ModelAndView mv = null;
@@ -59,7 +56,6 @@ public class CursosController {
 		return mv;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete/{id}")
 	public ModelAndView delete(@PathVariable Integer id) {
 		ModelAndView mv = null;
@@ -80,7 +76,6 @@ public class CursosController {
 	}
 	
 	@Transactional
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/save/{action}")
 	public ModelAndView save(@PathVariable String action, @Valid Curso curso, BindingResult bind) {
 		Message msg = null;
