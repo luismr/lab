@@ -54,7 +54,7 @@ public class ServiceTest {
 		Integer matriculaId = matriculaService.matricular(curso, aluno);
 		assertNotNull(matriculaId);
 		
-		System.out.println(matriculaId);
+		System.out.println("Matricula ==> " + matriculaId);
 	}
 
 }
