@@ -273,6 +273,16 @@ I have a table for bugs from a bug tracking software; let’s call the table “
 
 Create table if it not exists
 
+	DROP TABLE bugs;
+
+	CREATE TABLE bugs (id INT, open_date DATE, close_date DATE, severity VARCHAR(10));
+	INSERT INTO bugs
+		VALUES 	(1, '2015-07-30', '2015-08-02', 'low'),
+			(1, '2015-07-31', '2015-08-02', 'low'),
+            		(1, '2015-08-01', '2015-08-02', 'moderate'),
+            		(1, '2015-08-01', '2015-08-03', 'high'),
+            		(1, '2015-08-01', '2015-08-05', 'normal');
+
 Just run
 
 	SET @dateStart 	= '2015-07-01';            
