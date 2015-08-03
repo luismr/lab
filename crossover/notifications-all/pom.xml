@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>crossover.notifications</groupId>
+	<artifactId>notifications-all</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Notification Management System</name>
+	<description>Multi-tenant notification manager</description>
+
+	<modules>
+		<module>notifications-data</module>
+		<module>notifications-core</module>
+		<module>notifications-api</module>
+		<module>notifications-connector</module>
+		<module>notifications-war</module>
+	</modules>
+
+	<properties>
+		<java-version>1.8</java-version>
+		<spring>4.1.7.RELEASE</spring>
+		<spring-data>1.8.0.RELEASE</spring-data>
+		<spring-boot>1.2.5.RELEASE</spring-boot>
+		<spring-security>3.2.0.RELEASE</spring-security>
+		<hibernate>4.3.8.Final</hibernate>
+		<slf4j>1.6.1</slf4j>
+		<mysql>5.0.5</mysql>
+		<junit>4.11</junit>
+		<hikaricp>2.3.8</hikaricp>
+		<simple-mail>2.2</simple-mail>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- NOTIFICATIONS -->
+			<dependency>
+				<groupId>crossover.notifications</groupId>
+				<artifactId>notifications-data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>crossover.notifications</groupId>
+				<artifactId>notifications-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>crossover.notifications</groupId>
+				<artifactId>notifications-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>crossover.notifications</groupId>
+				<artifactId>notifications-connector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Mailer -->
+			<dependency>
+				<groupId>org.codemonkey.simplejavamail</groupId>
+				<artifactId>simple-java-mail</artifactId>
+				<version>${simple-mail}</version>
+			</dependency>
+			
+			<!-- UNIREST -->
+			<dependency>
+				<groupId>com.mashape.unirest</groupId>
+				<artifactId>unirest-java</artifactId>
+				<version>1.4.5</version>
+			</dependency>
+			
+			<!-- GSON -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.3.1</version>
+			</dependency>
+
+			<!-- SPRING -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring-data}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-jpa</artifactId>
+				<version>${spring-boot}</version>
+			</dependency>
+
+			<!-- Servlet -->
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-servlet-api</artifactId>
+				<version>7.0.30</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Jackson JSON Processor -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.4.1</version>
+			</dependency>
+
+			<!-- Security (used for CSRF protection only) -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring-security}</version>
+			</dependency>
+
+			<!-- SLF4J -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j}</version>
+			</dependency>
+
+			<!-- JPA Provider (Hibernate) -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate}</version>
+			</dependency>
+
+			<!-- HikariCP Datasource -->
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikaricp}</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<!-- MySQL Driver -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!-- Test -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit}</version>
+				<scope>test</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
