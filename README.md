@@ -1,4 +1,0 @@
-lab
-===
-
-Laboratório
