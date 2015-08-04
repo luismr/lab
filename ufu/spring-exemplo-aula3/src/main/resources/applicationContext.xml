@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<bean id="calendario" class="aula3.Calendario">
+		<constructor-arg value="01/01/2014" />
+	</bean>
+
+	<bean id="dataformater" class="java.text.SimpleDateFormat">
+		<constructor-arg value="dd/MM/yyyy" />
+	</bean>
+
+	<bean id="anonovo" class="java.util.Date"
+		factory-bean="calendario"
+		factory-method="createDate" />
+
+	<bean id="anonovo2" class="java.util.Date"
+		factory-bean="dataformater"
+		factory-method="parse">
+		<constructor-arg value="01/01/2014" /> 
+	</bean>
+
+	<bean id="pergunta" class="aula3.RespostaPerguntaFundamental">
+		<constructor-arg name="pergunta" value="Qual o sentido da vida, o universo e tudo mais?" />
+		<constructor-arg name="resposta" value="42"/>
+	</bean>
+
+	<bean id="pergunta2" class="aula3.RespostaPerguntaFundamental">
+		<constructor-arg name="pergunta" ref="mensagem" />
+		<constructor-arg name="resposta" ref="numero"/>
+	</bean>
+
+	<bean id="pergunta3" class="aula3.RespostaPerguntaFundamental">
+		<property name="pergunta" ref="mensagem" />
+		<property name="resposta" ref="numero" />
+	</bean>
+
+	<bean id="mensagem" class="java.lang.String">
+		<constructor-arg value="Minha Mensagem" />
+	</bean>
+	
+	<bean id="numero" class="java.lang.Integer">
+		<constructor-arg value="42"/>
+	</bean>
+	
+	<bean id="data" class="java.util.Date" />
+	
+	<util:list id="alunos" list-class="java.util.ArrayList">
+		<value>Rodrigo</value>
+		<value>Denis</value>
+		<value>Diego</value>
+		<value>Tiago</value>
+	</util:list>
+	
+	<util:properties id="config">
+		<prop key="home">/home/to/somewhere</prop>
+		<prop key="communication">async</prop>
+	</util:properties>
+	
+	<util:map id="operadoras" map-class="java.util.HashMap">
+		<entry key="12" value="CTBC" />
+		<entry key="21" value="CLARO" />
+		<entry key="15" value="VIVO" />
+		<entry key="31" value="OI" />
+		<entry key="14" value="OI BRT" />
+		<entry key="41" value="TIM" />
+	</util:map>
+
+</beans>
