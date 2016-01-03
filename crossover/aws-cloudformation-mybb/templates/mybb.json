@@ -1,0 +1,1067 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "AWS CloudFormation Template myBB: myhBB is web software you can use to create huge internet foruns and communities. This template installs a highly-available, scalable myBB deployment using a multi-az Amazon RDS database instance for storage and it shows how to use the AWS CloudFormation bootstrap scripts to deploy myBB. **WARNING** This template creates an Amazon EC2 instance, an Elastic Load Balancer and an Amazon RDS database instance and you will be billed for the AWS resources used if you create a stack from this template.",
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "MyBBBoardName": {
+      "Description": "MyBB Board Name",
+      "Type": "String",
+      "Default": "mybb",
+      "MinLength": "3",
+      "MaxLength": "64",
+      "ConstraintDescription": "MyBB Board Name must be between 3 and 64 characters"
+    },
+    "MyBBSiteName": {
+      "Description": "MyBB Site Name",
+      "Type": "String",
+      "Default": "mybb site name",
+      "MinLength": "3",
+      "MaxLength": "64",
+      "ConstraintDescription": "MyBB Site Name must be between 3 and 64 characters"
+    },
+    "MyBBSiteURL": {
+      "Description": "MyBB Site URL",
+      "Type": "String",
+      "Default": "url.to.site.url",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Site URL must be between 3 and 128 characters WITHOUT HTTP://"
+    },
+    "MyBBAdminEmail": {
+      "Description": "MyBB Admin Email",
+      "Type": "String",
+      "Default": "admin@admin",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Admin Email must be between 3 and 128 characters"
+    },
+    "MyBBCookiePath": {
+      "Description": "MyBB Cookie Path",
+      "Type": "String",
+      "Default": "/",
+      "MinLength": "1",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Cookie Path must be between 1 and 128 characters"
+    },
+    "MyBBContactEmail": {
+      "Description": "MyBB Contact Email",
+      "Type": "String",
+      "Default": "contact@contact",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Contact Email must be between 3 and 128 characters"
+    },
+    "MyBBS3BucketName": {
+      "Description": "MyBB S3BucketName for Uploads. It will be mounted on /opt/uploads and MyBB upload forlder will be linked to this folder",
+      "Type": "String",
+      "Default": "bucket-name",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Bucket Name must be between 3 and 128 characters"
+    },
+    "MyBBS3BucketAccessKeyID": {
+      "Description": "MyBB S3BucketAccessKeyID for Uploads Bucket",
+      "Type": "String",
+      "Default": "access key id here",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Bucket Access Key ID must be between 3 and 128 characters"
+    },
+    "MyBBS3BucketAccessKeySecret": {
+      "Description": "MyBB S3BucketAccessKeySecret for Uploads Bucket",
+      "Type": "String",
+      "Default": "access secret here",
+      "MinLength": "3",
+      "MaxLength": "128",
+      "ConstraintDescription": "MyBB Bucket Access Secret must be between 3 and 128 characters"
+    },
+    "InstanceType": {
+      "Description": "WebServer instance type",
+      "Type": "String",
+      "Default": "m3.medium",
+      "AllowedValues": [
+        "t2.micro",
+        "t2.small",
+        "t2.medium",
+        "m3.medium",
+        "m3.large",
+        "m3.xlarge",
+        "m3.2xlarge"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "SSHLocation": {
+      "Description": "IP address/range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "DBClass": {
+      "Description": "Database instance type",
+      "Type": "String",
+      "Default": "db.m3.medium",
+      "AllowedValues": [
+        "db.t1.micro",
+        "db.m1.small",
+        "db.m1.medium",
+        "db.m1.large",
+        "db.m1.xlarge",
+        "db.m2.xlarge",
+        "db.m2.2xlarge",
+        "db.m2.4xlarge",
+        "db.m3.medium",
+        "db.m3.large",
+        "db.m3.xlarge",
+        "db.m3.2xlarge",
+        "db.r3.large",
+        "db.r3.xlarge",
+        "db.r3.2xlarge",
+        "db.r3.4xlarge",
+        "db.r3.8xlarge",
+        "db.m2.xlarge",
+        "db.m2.2xlarge",
+        "db.m2.4xlarge",
+        "db.cr1.8xlarge"
+      ],
+      "ConstraintDescription": "must select a valid database instance type."
+    },
+    "DBName": {
+      "Default": "db_mybb",
+      "Description": "myBB database name",
+      "Type": "String",
+      "MinLength": "5",
+      "MaxLength": "64",
+      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9_]*",
+      "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    },
+    "DBUser": {
+      "NoEcho": "true",
+      "Description": "Database admin account username",
+      "Type": "String",
+      "MinLength": "2",
+      "MaxLength": "16",
+      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+      "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters and has minum 8 characters length."
+    },
+    "DBPassword": {
+      "NoEcho": "true",
+      "Description": "Database admin account password",
+      "Type": "String",
+      "MinLength": "8",
+      "MaxLength": "41",
+      "AllowedPattern": "[a-zA-Z0-9]*",
+      "ConstraintDescription": "must contain only alphanumeric characters."
+    },
+    "MultiAZDatabase": {
+      "Default": "false",
+      "Description": "Create a Multi-AZ MySQL Amazon RDS database instance",
+      "Type": "String",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "must be true or false."
+    },
+    "WebServerCapacity": {
+      "Default": "1",
+      "Description": "Initial number of WebServer instances",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "100",
+      "ConstraintDescription": "must be between 1 and 100."
+    },
+    "DBAllocatedStorage": {
+      "Default": "5",
+      "Description": "Size of the database (Gb)",
+      "Type": "Number",
+      "MinValue": "5",
+      "MaxValue": "16",
+      "ConstraintDescription": "must be between 1 and 16 Gb."
+    },
+    "CacheNodeType": {
+      "Description": "The compute and memory capacity of the nodes in the Cache Cluster",
+      "Type": "String",
+      "Default": "cache.m1.small",
+      "AllowedValues": [
+        "cache.m1.small",
+        "cache.m1.large",
+        "cache.m1.xlarge",
+        "cache.m2.xlarge",
+        "cache.m2.2xlarge",
+        "cache.m2.4xlarge",
+        "cache.c1.xlarge"
+      ],
+      "ConstraintDescription": "must select a valid Cache Node type."
+    },
+    "NumberOfCacheNodes": {
+      "Default": "1",
+      "Description": "The nuber of Cache Nodes the Cache Cluster should have",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "10",
+      "ConstraintDescription": "must be between 5 and 10."
+    }
+  },
+  "Mappings": {
+    "AWSInstanceType2Arch": {
+      "t2.micro": {
+        "Arch": "HVM64"
+      },
+      "t2.small": {
+        "Arch": "HVM64"
+      },
+      "t2.medium": {
+        "Arch": "HVM64"
+      },
+      "m3.medium": {
+        "Arch": "HVM64"
+      },
+      "m3.large": {
+        "Arch": "HVM64"
+      },
+      "m3.xlarge": {
+        "Arch": "HVM64"
+      },
+      "m3.2xlarge": {
+        "Arch": "HVM64"
+      }
+    },
+    "AWSRegionArch2AMI": {
+      "us-east-1": {
+        "PV64": "ami-0f4cfd64",
+        "HVM64": "ami-0d4cfd66",
+        "HVMG2": "ami-5b05ba30"
+      },
+      "us-west-2": {
+        "PV64": "ami-d3c5d1e3",
+        "HVM64": "ami-d5c5d1e5",
+        "HVMG2": "ami-a9d6c099"
+      },
+      "us-west-1": {
+        "PV64": "ami-85ea13c1",
+        "HVM64": "ami-87ea13c3",
+        "HVMG2": "ami-37827a73"
+      },
+      "eu-west-1": {
+        "PV64": "ami-d6d18ea1",
+        "HVM64": "ami-e4d18e93",
+        "HVMG2": "ami-72a9f105"
+      },
+      "eu-central-1": {
+        "PV64": "ami-a4b0b7b9",
+        "HVM64": "ami-a6b0b7bb",
+        "HVMG2": "ami-a6c9cfbb"
+      },
+      "ap-northeast-1": {
+        "PV64": "ami-1a1b9f1a",
+        "HVM64": "ami-1c1b9f1c",
+        "HVMG2": "ami-f644c4f6"
+      },
+      "ap-southeast-1": {
+        "PV64": "ami-d24b4280",
+        "HVM64": "ami-d44b4286",
+        "HVMG2": "ami-12b5bc40"
+      },
+      "ap-southeast-2": {
+        "PV64": "ami-ef7b39d5",
+        "HVM64": "ami-db7b39e1",
+        "HVMG2": "ami-b3337e89"
+      },
+      "sa-east-1": {
+        "PV64": "ami-5b098146",
+        "HVM64": "ami-55098148",
+        "HVMG2": "NOT_SUPPORTED"
+      },
+      "cn-north-1": {
+        "PV64": "ami-bec45887",
+        "HVM64": "ami-bcc45885",
+        "HVMG2": "NOT_SUPPORTED"
+      }
+    }
+  },
+  "Conditions": {
+    "Is-EC2-VPC": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "AWS::Region"
+            },
+            "eu-central-1"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "AWS::Region"
+            },
+            "cn-north-1"
+          ]
+        }
+      ]
+    },
+    "Is-EC2-Classic": {
+      "Fn::Not": [
+        {
+          "Condition": "Is-EC2-VPC"
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "ElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "AvailabilityZones": {
+          "Fn::GetAZs": ""
+        },
+        "CrossZone": "true",
+        "LBCookieStickinessPolicy": [
+          {
+            "PolicyName": "CookieBasedPolicy",
+            "CookieExpirationPeriod": "35"
+          }
+        ],
+        "Listeners": [
+          {
+            "LoadBalancerPort": "80",
+            "InstancePort": "80",
+            "Protocol": "HTTP",
+            "PolicyNames": [
+              "CookieBasedPolicy"
+            ]
+          },
+          {
+            "LoadBalancerPort": "443",
+            "InstancePort": "443",
+            "Protocol": "HTTP",
+            "PolicyNames": [
+              "CookieBasedPolicy"
+            ]
+          }
+        ],
+        "HealthCheck": {
+          "Target": "HTTP:80/ping.txt",
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "5",
+          "Interval": "10",
+          "Timeout": "5"
+        }
+      }
+    },
+    "WebServerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable HTTP/HTTPS access via port 80/443 locked down to the load balancer + SSH access",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "SourceSecurityGroupOwnerId": {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "SourceSecurityGroup.OwnerAlias"
+              ]
+            },
+            "SourceSecurityGroupName": {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "SourceSecurityGroup.GroupName"
+              ]
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "SourceSecurityGroupOwnerId": {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "SourceSecurityGroup.OwnerAlias"
+              ]
+            },
+            "SourceSecurityGroupName": {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "SourceSecurityGroup.GroupName"
+              ]
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": {
+              "Ref": "SSHLocation"
+            }
+          }
+        ]
+      }
+    },
+    "WebServerGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": {
+          "Fn::GetAZs": ""
+        },
+        "LaunchConfigurationName": {
+          "Ref": "LaunchConfig"
+        },
+        "MinSize": "1",
+        "MaxSize": "100",
+        "DesiredCapacity": {
+          "Ref": "WebServerCapacity"
+        },
+        "LoadBalancerNames": [
+          {
+            "Ref": "ElasticLoadBalancer"
+          }
+        ]
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Timeout": "PT60M"
+        }
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MinInstancesInService": "1",
+          "MaxBatchSize": "1",
+          "PauseTime": "PT60M",
+          "WaitOnResourceSignals": "true"
+        }
+      }
+    },
+    "ScaleUpPolicy" : {
+       "Type" : "AWS::AutoScaling::ScalingPolicy",
+       "Properties" : {
+          "AdjustmentType" : "ChangeInCapacity",
+          "AutoScalingGroupName" : { "Ref" : "WebServerGroup" },
+          "Cooldown" : "1",
+          "ScalingAdjustment" : "1"
+       }
+    },
+    "CPUAlarmHigh": {
+       "Type": "AWS::CloudWatch::Alarm",
+       "Properties": {
+          "EvaluationPeriods": "1",
+          "Statistic": "Average",
+          "Threshold": "10",
+          "AlarmDescription": "Alarm if CPU too high or metric disappears indicating instance is down",
+          "Period": "60",
+          "AlarmActions": [ { "Ref": "ScaleUpPolicy" } ],
+          "Namespace": "AWS/EC2",
+          "Dimensions": [ {
+             "Name": "AutoScalingGroupName",
+             "Value": { "Ref": "WebServerGroup" }
+          } ],
+          "ComparisonOperator": "GreaterThanThreshold",
+          "MetricName": "CPUUtilization"
+       }
+    },
+    "LaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "configSets": {
+            "mybb_install": [
+              "install_cfn",
+              "install_mybb"
+            ]
+          },
+          "install_cfn": {
+            "files": {
+              "/etc/cfn/cfn-hup.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[main]\n",
+                      "stack=",
+                      {
+                        "Ref": "AWS::StackId"
+                      },
+                      "\n",
+                      "region=",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "\n"
+                    ]
+                  ]
+                },
+                "mode": "000400",
+                "owner": "root",
+                "group": "root"
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[cfn-auto-reloader-hook]\n",
+                      "triggers=post.update\n",
+                      "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                      "action=/opt/aws/bin/cfn-init -v ",
+                      "         --stack ",
+                      {
+                        "Ref": "AWS::StackName"
+                      },
+                      "         --resource LaunchConfig ",
+                      "         --configsets mybb_install ",
+                      "         --region ",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "\n"
+                    ]
+                  ]
+                },
+                "mode": "000400",
+                "owner": "root",
+                "group": "root"
+              }
+            },
+            "services": {
+              "sysvinit": {
+                "cfn-hup": {
+                  "enabled": "true",
+                  "ensureRunning": "true",
+                  "files": [
+                    "/etc/cfn/cfn-hup.conf",
+                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+                  ]
+                }
+              }
+            }
+          },
+          "install_mybb": {
+            "packages": {
+                "yum": {
+                    "php": [],
+                    "php-mysql": [],
+                    "php-mcrypt": [],
+                    "php-mbstring": [],
+                    "php-pear": [],
+                    "php-pdo": [],
+                    "php-pecl-memcached": [],
+                    "mysql": [],
+                    "httpd": [],
+                    "mod_ssl": [],
+                    "wget": [],
+                    "curl": [],
+                    "unzip": [],
+                    "gcc": [],
+                    "libstdc++-devel": [],
+                    "gcc-c++": [],
+                    "fuse": [],
+                    "fuse-devel": [],
+                    "libcurl": [],
+                    "libcurl-devel": [],
+                    "libxml2-devel": [],
+                    "mailcap": [],
+                    "automake": [],
+                    "openssl-devel": [],
+                    "git": [],
+                    "openssl": []
+                }
+            },
+            "files": {
+                "/tmp/mybb-install-s3fs.sh": {
+                  "content": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "#!/bin/bash\n",
+                        "git clone https://github.com/s3fs-fuse/s3fs-fuse\n",
+                        "cd s3fs-fuse\n",
+                        "./autogen.sh\n",
+                        "./configure --prefix=/usr --with-openssl\n",
+                        "make\n",
+                        "make install\n",
+                        "mkdir /opt/uploads\n",
+                        "chown -R apache:apache /opt/uploads\n",
+                        "chmod 777 /opt/uploads\n",
+                        "echo '",
+                        {
+                          "Ref": "MyBBS3BucketAccessKeyID"
+                        },
+                        ":",
+                        {
+                          "Ref": "MyBBS3BucketAccessKeySecret"
+                        },
+                        "' > /etc/passwd-s3fs\n",
+                        "chmod 400 /etc/passwd-s3fs\n",
+                        "echo '",
+                        "s3fs#",
+                        {
+                          "Ref": "MyBBS3BucketName"
+                        },
+                        ":  /opt/uploads  fuse  rw,use_cache=/tmp,allow_other,rw  0  0",
+                        "' >> /etc/fstab\n",
+                        "mount -a\n"
+                      ]
+                    ]
+                  },
+                  "mode": "000500",
+                  "owner": "root",
+                  "group": "root"
+                },
+                "/tmp/mybb-install-files.sh": {
+                  "content": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "#!/bin/bash\n",
+                        "cd /tmp\n",
+                        "wget http://resources.mybb.com/downloads/mybb_1806.zip\n",
+                        "wget https://s3.amazonaws.com/aws-labs-cloudfront/mybb/assets/config.php\n",
+                        "wget https://s3.amazonaws.com/aws-labs-cloudfront/mybb/assets/mybb.sql\n",
+                        "wget https://s3.amazonaws.com/aws-labs-cloudfront/mybb/assets/themes.tar.gz\n",
+                        "mkdir -p /tmp/mybb\n",
+                        "cd /tmp/mybb\n",
+                        "unzip ../mybb_1806.zip\n",
+                        "mv Upload/* /var/www/html/\n",
+                        "chown apache:apache -R /var/www/html\n",
+                        "mv /var/www/html/uploads/* /opt/uploads\n",
+                        "rm -rf /var/www/html/uploads\n",
+                        "ln -s /opt/uploads /var/www/html/uploads\n",
+                        "chmod 755 /opt/uploads/index.html\n",
+                        "chmod 777 -R /opt/uploads/avatars\n",
+                        "echo 'OK' > /var/www/html/ping.txt\n",
+                        "touch /var/www/html/install/lock\n",
+                        "tar xvzf /tmp/themes.tar.gz -C /var/www/html/cache/\n"
+                      ]
+                    ]
+                  },
+                  "mode": "000500",
+                  "owner": "root",
+                  "group": "root"
+              },
+              "/tmp/mybb-create-config.sh": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "#!/bin/bash\n",
+                      "cd /tmp\n",
+                      "sed -i \"s/'param-database-name'/'",
+                      {
+                        "Ref": "DBName"
+                      },
+                      "'/g\" config.php\n",
+                      "sed -i \"s/'param-database-username'/'",
+                      {
+                        "Ref": "DBUser"
+                      },
+                      "'/g\" config.php\n",
+                      "sed -i \"s/'param-database-password'/'",
+                      {
+                        "Ref": "DBPassword"
+                      },
+                      "'/g\" config.php\n",
+                      "sed -i \"s/'param-database-host'/'",
+                      {
+                        "Fn::GetAtt": [
+                          "DBInstance",
+                          "Endpoint.Address"
+                        ]
+                      },
+                      "'/g\" config.php\n",
+                      "sed -i \"s/'param-memcache-host'/'",
+                      {
+                        "Fn::GetAtt": [
+                          "CacheCluster",
+                          "ConfigurationEndpoint.Address"
+                        ]
+                      },
+                      "'/g\" config.php\n",
+                      "sed -i \"s/'param-memcache-port'/'",
+                      {
+                        "Fn::GetAtt": [
+                          "CacheCluster",
+                          "ConfigurationEndpoint.Port"
+                        ]
+                      },
+                      "'/g\" config.php\n",
+                      "cp /tmp/config.php /var/www/html/inc/config.php\n",
+                      "chown apache:apache /var/www/html/inc/config.php\n"
+                    ]
+                  ]
+                },
+                "mode": "000500",
+                "owner": "root",
+                "group": "root"
+              },
+              "/tmp/mybb-configure-database-script.sh": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "#!/bin/bash -x\n",
+                      "sed -i \"s/'param-application-board-name'/'",
+                      {
+                        "Ref": "MyBBBoardName"
+                      },
+                      "'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-board-url'/'",
+                      "http:\\/\\/",
+                      {
+                        "Fn::GetAtt": [
+                          "ElasticLoadBalancer",
+                          "DNSName"
+                        ]
+                      },
+                      "\\/'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-site-name'/'",
+                      {
+                        "Ref": "MyBBSiteName"
+                      },
+                      "'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-site-url'/'",
+                      "http:\\/\\/",
+                      {
+                        "Ref": "MyBBSiteURL"
+                      },
+                      "\\/'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-admin-email'/'",
+                      {
+                        "Ref": "MyBBAdminEmail"
+                      },
+                      "'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-cookie-domain'/'",
+                      {
+                        "Fn::GetAtt": [
+                          "ElasticLoadBalancer",
+                          "DNSName"
+                        ]
+                      },
+                      "'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-cookie-path'/'",
+                      {
+                        "Ref": "MyBBCookiePath"
+                      },
+                      "'/g\" mybb.sql\n",
+                      "sed -i \"s/'param-application-contact-email'/'",
+                      {
+                        "Ref": "MyBBContactEmail"
+                      },
+                      "'/g\" mybb.sql\n"
+                    ]
+                  ]
+                },
+                "mode": "000500",
+                "owner": "root",
+                "group": "root"
+              },
+              "/tmp/mybb-load-database-script.sh": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "#!/bin/bash\n",
+                      "mysql ",
+                      " -h ",
+                      {
+                        "Fn::GetAtt": [
+                          "DBInstance",
+                          "Endpoint.Address"
+                        ]
+                      },
+                      " -u",
+                      {
+                        "Ref": "DBUser"
+                      },
+                      " -p",
+                      {
+                        "Ref": "DBPassword"
+                      },
+                      " -e \"select * from mybb_settings where value like '%",
+                      {
+                        "Fn::GetAtt": [
+                          "ElasticLoadBalancer",
+                          "DNSName"
+                        ]
+                      },
+                      "%'\" ",
+                      {
+                        "Ref": "DBName"
+                      },
+                      " > /tmp/out-check-db-connection.txt\n",
+                      "LINES=`cat /tmp/out-check-db-connection.txt | wc -l`\n",
+                      "if [ $LINES -lt 1 ]; then",
+                      "   mysql ",
+                      " -h ",
+                      {
+                        "Fn::GetAtt": [
+                          "DBInstance",
+                          "Endpoint.Address"
+                        ]
+                      },
+                      " -u",
+                      {
+                        "Ref": "DBUser"
+                      },
+                      " -p",
+                      {
+                        "Ref": "DBPassword"
+                      },
+                      " ",
+                      {
+                        "Ref": "DBName"
+                      },
+                      " < /tmp/mybb.sql\n",
+                      "fi\n"
+                    ]
+                  ]
+                },
+                "mode": "000500",
+                "owner": "root",
+                "group": "root"
+              }
+            },
+            "commands": {
+              "00_mybb_install_s3fs": {
+                "command": "/tmp/mybb-install-s3fs.sh",
+                "cwd": "/tmp"
+              },
+              "01_mybb_install": {
+                "command": "/tmp/mybb-install-files.sh",
+                "cwd": "/tmp"
+              },
+              "02_mybb_configure_mybb": {
+                "command": "/tmp/mybb-create-config.sh",
+                "cwd": "/var/www/html/inc"
+              },
+              "03_mybb_configure_database_script": {
+                "command": "/tmp/mybb-configure-database-script.sh",
+                "cwd": "/tmp"
+              },
+              "04_mybb_load_database_script": {
+                "command": "/tmp/mybb-load-database-script.sh",
+                "cwd": "/tmp"
+              }
+            },
+            "services": {
+              "sysvinit": {
+                "httpd": {
+                  "enabled": "true",
+                  "ensureRunning": "true"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Properties": {
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            {
+              "Fn::FindInMap": [
+                "AWSInstanceType2Arch",
+                {
+                  "Ref": "InstanceType"
+                },
+                "Arch"
+              ]
+            }
+          ]
+        },
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "SecurityGroups": [
+          {
+            "Ref": "WebServerSecurityGroup"
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -xe\n",
+                "yum update -y aws-cfn-bootstrap\n",
+                "/opt/aws/bin/cfn-init -v ",
+                "         --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                "         --resource LaunchConfig ",
+                "         --configsets mybb_install ",
+                "         --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "\n",
+                "/opt/aws/bin/cfn-signal -e $? ",
+                "         --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                "         --resource WebServerGroup ",
+                "         --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "CacheCluster": {
+      "Type": "AWS::ElastiCache::CacheCluster",
+      "Properties": {
+        "CacheNodeType": {
+          "Ref": "CacheNodeType"
+        },
+        "CacheSecurityGroupNames": [
+          {
+            "Ref": "CacheSecurityGroup"
+          }
+        ],
+        "Engine": "memcached",
+        "NumCacheNodes": {
+          "Ref": "NumberOfCacheNodes"
+        }
+      }
+    },
+    "CacheSecurityGroup": {
+      "Type": "AWS::ElastiCache::SecurityGroup",
+      "Properties": {
+        "Description": "Lock cache down to Web Server access only"
+      }
+    },
+    "CacheSecurityGroupIngress": {
+      "Type": "AWS::ElastiCache::SecurityGroupIngress",
+      "DependsOn": "WebServerSecurityGroup",
+      "Properties": {
+        "CacheSecurityGroupName": {
+          "Ref": "CacheSecurityGroup"
+        },
+        "EC2SecurityGroupName": {
+          "Ref": "WebServerSecurityGroup"
+        }
+      }
+    },
+    "DBSecurityGroup": {
+      "Type": "AWS::RDS::DBSecurityGroup",
+      "Condition": "Is-EC2-Classic",
+      "Properties": {
+        "DBSecurityGroupIngress": {
+          "EC2SecurityGroupName": {
+            "Ref": "WebServerSecurityGroup"
+          }
+        },
+        "GroupDescription": "database access"
+      }
+    },
+    "DBEC2SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Condition": "Is-EC2-VPC",
+      "Properties": {
+        "GroupDescription": "Open database for access",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3306",
+            "ToPort": "3306",
+            "SourceSecurityGroupName": {
+              "Ref": "WebServerSecurityGroup"
+            }
+          }
+        ]
+      }
+    },
+    "DBInstance": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "DBName": {
+          "Ref": "DBName"
+        },
+        "Engine": "MySQL",
+        "MultiAZ": {
+          "Ref": "MultiAZDatabase"
+        },
+        "MasterUsername": {
+          "Ref": "DBUser"
+        },
+        "MasterUserPassword": {
+          "Ref": "DBPassword"
+        },
+        "DBInstanceClass": {
+          "Ref": "DBClass"
+        },
+        "AllocatedStorage": {
+          "Ref": "DBAllocatedStorage"
+        },
+        "VPCSecurityGroups": {
+          "Fn::If": [
+            "Is-EC2-VPC",
+            [
+              {
+                "Fn::GetAtt": [
+                  "DBEC2SecurityGroup",
+                  "GroupId"
+                ]
+              }
+            ],
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
+        },
+        "DBSecurityGroups": {
+          "Fn::If": [
+            "Is-EC2-Classic",
+            [
+              {
+                "Ref": "DBSecurityGroup"
+              }
+            ],
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "WebsiteURL": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "DNSName"
+              ]
+            },
+            "/"
+          ]
+        ]
+      },
+      "Description": "myBB Website"
+    }
+  }
+}

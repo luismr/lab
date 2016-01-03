@@ -1,0 +1,26 @@
+param-database-name
+param-database-host
+param-database-username
+param-database-password
+
+param-memcache-host
+
+param-application-board-name            MyBBBoardName
+param-application-board-url             dynamic cluster endpoint
+param-application-site-name             MyBBSiteName
+param-application-site-url              MyBBSiteURL
+param-application-admin-email           MyBBAdminEmail
+param-application-cookie-domain         dynamic cluster endpoint
+param-application-cookie-path           MyBBCookiePath
+param-application-cookie-prefix         MyBBCookiePrefix
+
+param-application-contact-email         MyBBContactEmail
+
+param-application-upload-path           MyBBUploadPath
+
+
+
+aws-labs-mybb-upload
+
+AKIAIENTNTFCDXLESWEA
+BF1tNIkyAnF/hSbT2289EmxCrA2eOyp5qtM1ZLil
