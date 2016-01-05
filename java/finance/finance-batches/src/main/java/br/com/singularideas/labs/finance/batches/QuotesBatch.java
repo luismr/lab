@@ -18,7 +18,7 @@ public class QuotesBatch {
 	private static final int STATUS_INVALID_CURRENCIES = -2;
 
 	public static void main(String[] args) {
-		if (args.length < 1 || args.length > 3) {
+		if (args.length < 2) {
 			System.err.println("Error: you must specify FROM and TO currencies");
 			printUsage();
 			System.exit(STATUS_INVALID_ARGUMENTS);
@@ -37,7 +37,7 @@ public class QuotesBatch {
 		}
 		
 		String path = "";
-		if (args[2] != null) {
+		if (args.length == 3 && args[2] != null) {
 			path = args[2] + File.separator;
 		}
 		
@@ -66,7 +66,7 @@ public class QuotesBatch {
 		System.err.println("");
 		System.err.println("Usage: quotes.sh <FROM> <TO> [pathTo]");
 		System.err.println("       <FROM> and <TO> currency code");
-		System.err.println("          USD - Brazilian Real");
+		System.err.println("          USD - American Dollar");
 		System.err.println("          EUR - Euro");
 		System.err.println("          GBP - Britain Pound");
 		System.err.println("          BRL - Brazilian Real");
