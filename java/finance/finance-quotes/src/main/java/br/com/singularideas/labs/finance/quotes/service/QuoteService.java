@@ -51,7 +51,7 @@ public class QuoteService {
 		String from = cols[0].substring(3, 6);
 		String dateInput = String.format("%s %s", cols[2], cols[3]);
 		Date date = (new SimpleDateFormat("MM/dd/yyyy hh:mma")).parse(dateInput);
-		Double value = Double.parseDouble(cols[1]);
+		Float value = Float.parseFloat(cols[1]);
 		
 		Quote q = new Quote();
 		q.setTo(Currency.valueOf(to));

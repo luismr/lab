@@ -6,7 +6,7 @@ public class Quote {
 
 	private Currency from;
 	private Currency to;
-	private Double value;
+	private Float value;
 	private Date date;
 	
 	public Quote() {}
@@ -27,11 +27,11 @@ public class Quote {
 		this.to = to;
 	}
 
-	public Double getValue() {
+	public Float getValue() {
 		return value;
 	}
 
-	public void setValue(Double value) {
+	public void setValue(Float value) {
 		this.value = value;
 	}
 
