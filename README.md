@@ -7,3 +7,4 @@ Repository so share experiences, tips and tricks about Java, Spring and many mor
 * UFU: Architecture Training 2013
 * Crossover: Application Tests
 * WalletHub: Application Tests
+* Java: Concept Apps to test frameworks
