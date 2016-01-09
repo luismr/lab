@@ -87,7 +87,7 @@ public class RuntimeService {
 			String[] commands = cmd.toArray(new String[cmd.size()]);
 			Process p = rt.exec(commands);
 
-			Thread.sleep(500);
+			Thread.sleep(2000);
 
 			if (p.exitValue() != 0) {
 				throw new AboriginalException(String.format("Command '%s %s' exit with errors [%s]", command, args,

@@ -5,8 +5,7 @@ import java.io.File;
 public interface ProtectManager {
 
 	public static final String HOME = System.getProperty("user.home");
-	public static final String HOME_SCREENSHOTS = HOME + File.separator + "screenshots";
-	
+	public static final String HOME_SCREENSHOTS = HOME + File.separator + "Pictures" + File.separator + "screenshots";
 
 	void protectMe();
 	
