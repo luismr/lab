@@ -1,6 +1,7 @@
 package br.com.singularideas.labs.knowhub.client.aboriginal.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,9 +22,6 @@ public class FileManagerServiceTest {
 	@Autowired
 	private FileManagerService fileManagerService;
 	
-	@Autowired
-	private RuntimeService runtimeService;
-
 	@Before
 	public void setUp() {
 		if (fileManagerService.exists(WORKDIR)) {
@@ -52,7 +50,7 @@ public class FileManagerServiceTest {
 	@Test
 	public void testDeleteString() {
 		assertFalse(fileManagerService.exists(WORKDIR + "/filemanager-test.txt"));
-		runtimeService.perform("touch " + WORKDIR + "/filemanager-test.txt");
+		fileManagerService.touch(WORKDIR + "/filemanager-test.txt");
 		assertTrue(fileManagerService.exists(WORKDIR + "/filemanager-test.txt"));
 		fileManagerService.delete(WORKDIR + "/filemanager-test.txt");
 		assertFalse(fileManagerService.exists(WORKDIR + "/filemanager-test.txt"));
@@ -63,11 +61,11 @@ public class FileManagerServiceTest {
 		assertFalse(fileManagerService.exists(WORKDIR + "/filemanager-test"));
 		fileManagerService.createFolder(WORKDIR + "/filemanager-test");
 		assertTrue(fileManagerService.exists(WORKDIR + "/filemanager-test"));
-		runtimeService.perform("touch " + WORKDIR + "/filemanager-test/1.txt");
+		fileManagerService.touch(WORKDIR + "/filemanager-test/1.txt");
 		assertTrue(fileManagerService.exists(WORKDIR + "/filemanager-test/1.txt"));
-		runtimeService.perform("touch " + WORKDIR + "/filemanager-test/2.txt");
+		fileManagerService.touch(WORKDIR + "/filemanager-test/2.txt");
 		assertTrue(fileManagerService.exists(WORKDIR + "/filemanager-test/2.txt"));
-		runtimeService.perform("touch " + WORKDIR + "/filemanager-test/3.txt");
+		fileManagerService.touch(WORKDIR + "/filemanager-test/3.txt");
 		assertTrue(fileManagerService.exists(WORKDIR + "/filemanager-test/3.txt"));
 		fileManagerService.delete(WORKDIR + "/filemanager-test", true);
 		assertFalse(fileManagerService.exists(WORKDIR + "/filemanager-test"));

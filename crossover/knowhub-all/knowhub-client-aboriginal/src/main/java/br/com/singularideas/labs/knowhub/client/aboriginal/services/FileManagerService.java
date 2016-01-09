@@ -106,7 +106,22 @@ public class FileManagerService {
 				}
 			}
 		}
-
+	}
+	
+	public void touch(final String pathToFile) {
+		File file = new File(pathToFile);
+		
+		if (file.exists()) {
+			throw new AboriginalException(String.format("file %s already exists" , pathToFile));
+		}
+		
+		try {
+			if (!file.createNewFile()) {
+				throw new RuntimeException(String.format("cannot create file %s" , pathToFile));
+			}
+		} catch (Exception e) {
+			throw new AboriginalException(e.getMessage(), e);
+		}
 	}
 
 }
