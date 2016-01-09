@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalConfig;
+import br.com.singularideas.labs.knowhub.client.aboriginal.OperationalSystem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( classes = {AboriginalConfig.class} )
@@ -17,11 +18,16 @@ public class AppleScriptServiceTest {
 	@Autowired
 	private AppleScriptService script;
 	
+	@Autowired
+	private RuntimeService runtime;
+	
 	@Test
 	public void testExecute() {
-		String out = script.execute("do shell script \"echo test\"");
-		assertNotNull(out);
-		assertTrue("test".equals(out));
+		if (OperationalSystem.MAC.equals(runtime.getOperationalSystem())) {
+			String out = script.execute("do shell script \"echo test\"");
+			assertNotNull(out);
+			assertTrue("test".equals(out));
+		}
 	}
 
 }

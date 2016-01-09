@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalConfig;
+import br.com.singularideas.labs.knowhub.client.aboriginal.OperationalSystem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( classes = {AboriginalConfig.class} )
@@ -19,7 +20,17 @@ public class RuntimeServiceTest {
 	
 	@Test
 	public void testPerformString() {
-		String out = runtime.perform("ls -d /tmp");
+		String cmd = null;
+		
+		if (OperationalSystem.MAC.equals(runtime.getOperationalSystem())) {
+			cmd = "ls -d /tmp";
+		} else if (OperationalSystem.WINDOWS.equals(runtime.getOperationalSystem())) {
+			cmd = "dir -d /tmp";
+		} else {
+			fail("incompatible OS to test!");
+		}
+		
+		String out = runtime.perform(cmd);
 		assertNotNull(out);
 		assertTrue("/tmp".equals(out));
 	}
