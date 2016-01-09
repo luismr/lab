@@ -10,19 +10,16 @@ import br.com.singularideas.labs.knowhub.client.aboriginal.ProtectManager;
 public class WindowsProtectManager implements ProtectManager {
 
 	@Autowired
-	private FileManagerService fileManager;
-	
-	@Autowired
 	private ProtectThread thread;
 
 	@Override
 	public void protectMe() {
-		throw new AboriginalException("Not implemented yet!");
+		thread.start();
 	}
 
 	@Override
 	public void unprotectMe() {
-		throw new AboriginalException("Not implemented yet!");
+		thread.shutdown();
 	}
 
 	@Override

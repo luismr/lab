@@ -89,20 +89,24 @@ public class FileManagerService {
 	}
 
 	public void deleteLastFilesByTimePassedFromCertainTime(final String path, final long begin, final long delay) {
-		File dir = new File("/path/to/dir");
-
-		File[] files = dir.listFiles();
-		if (files.length > 0) {
-			long now = System.currentTimeMillis();
+		File dir = new File(path);
+		
+		if (dir.exists()) {
+			File[] files = dir.listFiles();
 			
-			for (File file : files) {
-				if (file.lastModified() > begin) {
-					if ((now - file.lastModified()) >= delay) {
-						delete(file);
-					}					
+			if (files.length > 0) {
+				long now = System.currentTimeMillis();
+				
+				for (File file : files) {
+					if (file.lastModified() > begin) {
+						if ((now - file.lastModified()) >= delay) {
+							delete(file);
+						}					
+					}
 				}
 			}
 		}
+
 	}
 
 }
