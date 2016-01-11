@@ -9,7 +9,7 @@
 		<module>knowhub-client-aboriginal</module>
 		<module>knowhub-common</module>
 		<module>knowhub-model</module>
-		<module>knowhub-api-rest</module>
+		<module>knowhub-web</module>
 		<module>knowhub-client-api</module>
 	</modules>
 	<properties>
@@ -50,7 +50,7 @@
 			</dependency>
 			<dependency>
 				<groupId>br.com.singularideas.labs.knowhub</groupId>
-				<artifactId>knowhub-api-rest</artifactId>
+				<artifactId>knowhub-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

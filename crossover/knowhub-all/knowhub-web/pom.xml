@@ -6,7 +6,7 @@
 		<artifactId>knowhub-all</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>knowhub-api-rest</artifactId>
+	<artifactId>knowhub-web</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
