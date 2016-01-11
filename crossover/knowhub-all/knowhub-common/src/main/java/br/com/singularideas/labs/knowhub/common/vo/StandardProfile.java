@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.singularideas.labs.knowhub.common.data.Subscriber;
 import br.com.singularideas.labs.knowhub.common.data.Subscription;
 
-public class Session {
+public class StandardProfile implements Profile {
 
 	private Date created;
 	
@@ -14,28 +14,52 @@ public class Session {
 	
 	private List<Subscription> subscriptions;
 	
-	public Session() {}
+	public StandardProfile() {}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#getCreated()
+	 */
+	@Override
 	public Date getCreated() {
 		return created;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#setCreated(java.util.Date)
+	 */
+	@Override
 	public void setCreated(Date created) {
 		this.created = created;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#getSubscriber()
+	 */
+	@Override
 	public Subscriber getSubscriber() {
 		return subscriber;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#setSubscriber(br.com.singularideas.labs.knowhub.common.data.Subscriber)
+	 */
+	@Override
 	public void setSubscriber(Subscriber subscriber) {
 		this.subscriber = subscriber;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#getSubscriptions()
+	 */
+	@Override
 	public List<Subscription> getSubscriptions() {
 		return subscriptions;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.singularideas.labs.knowhub.common.vo.Profile#setSubscriptions(java.util.List)
+	 */
+	@Override
 	public void setSubscriptions(List<Subscription> subscriptions) {
 		this.subscriptions = subscriptions;
 	}
@@ -58,7 +82,7 @@ public class Session {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Session other = (Session) obj;
+		StandardProfile other = (StandardProfile) obj;
 		if (created == null) {
 			if (other.created != null)
 				return false;

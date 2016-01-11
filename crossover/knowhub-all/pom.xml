@@ -9,6 +9,7 @@
 		<module>knowhub-client-aboriginal</module>
 		<module>knowhub-common</module>
 		<module>knowhub-model</module>
+		<module>knowhub-api-rest</module>
 	</modules>
 	<properties>
 		<version.unirest>1.4.7</version.unirest>
@@ -66,6 +67,16 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
 				<version>${version.spring}</version>
 			</dependency>
 			<dependency>
