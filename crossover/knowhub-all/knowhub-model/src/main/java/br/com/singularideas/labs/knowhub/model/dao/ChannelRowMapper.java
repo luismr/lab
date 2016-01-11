@@ -34,6 +34,7 @@ public class ChannelRowMapper implements RowMapper<Channel> {
 		
 		List<Item> items = itemDAO.getByChannel(c);
 		c.setItems(items);
+		c.setPrice(rs.getFloat("price"));
 
 		return c;
 	}
