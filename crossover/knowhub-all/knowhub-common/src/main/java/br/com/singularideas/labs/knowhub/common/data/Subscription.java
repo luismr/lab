@@ -136,8 +136,15 @@ public class Subscription {
 
 	@Override
 	public String toString() {
-		return "Subscription [id=" + id + ", subscriber=" + subscriber + ", channel=" + channel + ", created=" + created
-				+ ", updated=" + updated + ", expires=" + expires + ", status=" + status + "]";
+		String output = null;
+		
+		if (channel != null && channel.getName() != null) {
+			output = channel.getName();
+		} else {
+			output = "Invalid Channel Name";
+		}
+		
+		return output;
 	}
 	
 }

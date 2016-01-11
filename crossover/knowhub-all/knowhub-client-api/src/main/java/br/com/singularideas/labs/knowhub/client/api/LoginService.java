@@ -20,10 +20,12 @@ public class LoginService {
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String PATH_LOGIN = "/login";
 	private static final String CONTENT_TYPE = "Content-Type";
-	private static final String DEFAULT_BASEURL = "http://localhost:8080/knowhub-api-rest";
+	
+	public static final String DEFAULT_BASEURL = "http://localhost:8080/knowhub-api-rest";
 
 	@Autowired
 	private Gson gson;
+	
 	public Profile login(final String email, final String password) {
 		return login(DEFAULT_BASEURL, email, password);
 	}
@@ -51,6 +53,20 @@ public class LoginService {
 		}
 		
 		return profile;
+	}
+
+	public Profile refresh(final Profile profile) {
+		return refresh(DEFAULT_BASEURL, profile);
+	}
+	
+	public Profile refresh(final String baseurl, final Profile profile) {
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(baseurl), "baseurl must not be empty!");
+		Preconditions.checkArgument(profile != null, "profile must not be null!");
+		Preconditions.checkArgument(profile.getSubscriber() != null, "profile must not be null!");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(profile.getSubscriber().getEmail()), "email must not be empty!");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(profile.getSubscriber().getPassword()), "password must not be empty!");
+		
+		return login(baseurl, profile.getSubscriber().getEmail(), profile.getSubscriber().getPassword());
 	}
 	
 }

@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
 import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalException;
-import br.com.singularideas.labs.knowhub.client.aboriginal.OperationalSystem;
 
 @Service
 public class RuntimeService {

@@ -1,4 +1,4 @@
-package br.com.singularideas.labs.knowhub.client.aboriginal;
+package br.com.singularideas.labs.knowhub.client.aboriginal.services;
 
 import java.io.File;
 

@@ -9,6 +9,10 @@
 	<artifactId>knowhub-client-aboriginal</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>br.com.singularideas.labs.knowhub</groupId>
+			<artifactId>knowhub-client-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout-swing</artifactId>
 		</dependency>
@@ -19,6 +23,14 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.icepdf</groupId>
+			<artifactId>icepdf-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.icepdf</groupId>
+			<artifactId>icepdf-viewer</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

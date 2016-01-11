@@ -1,10 +1,8 @@
 package br.com.singularideas.labs.knowhub.client.aboriginal.gui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.net.URI;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -14,25 +12,37 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-
-import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalConfig;
-import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalException;
+import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.ApplicationContextLoader;
+import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.ApplicationWindowListener;
 import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.DesktopUtil;
-import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.SingleInstanceThread;
+import br.com.singularideas.labs.knowhub.client.api.LoginService;
+import br.com.singularideas.labs.knowhub.common.vo.Profile;
 
-public class LoginForm extends JFrame {
+public class FormLogin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private LoginService loginService;
+	
 	private static final String URL_SITE_REGISTER = "http://localhost:8080/knowhub/register";
+
+	public static final String KEY_PROFILE = "key-profile";
+	public static final String KEY_BASEURL = "key-baseurl";
 
 	private JTextField userText;
 	private JTextField passwordText;
+
+	private Map<String, Object> cache;
 	
-	public LoginForm() {
+	@SuppressWarnings("unchecked")
+	public FormLogin(final String baseurl) {
+		super();
+		
+		loginService = ApplicationContextLoader.getInstance().getApplicationContext().getBean(LoginService.class);
+
+		cache = (Map<String, Object>) ApplicationContextLoader.getInstance().getApplicationContext().getBean("cacheService");
+		cache.put(KEY_BASEURL, baseurl);
+		
 		frameLogin();
 	}
 
@@ -40,48 +50,15 @@ public class LoginForm extends JFrame {
 		setName("knowhub-login");
 		setTitle("KnowHub Client Login");
 		
-		setSize(300, 150);
+		setSize(400, 150);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
-		addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				AbstractApplicationContext ctx = (AbstractApplicationContext) LoginForm.getContext();
-				ctx.registerShutdownHook();
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				userText.requestFocus();
-			}
-			
-		});
+		addWindowListener(new ApplicationWindowListener());
 
 		JPanel loginForm = generateLoginForm();
-		add(loginForm);
+		getContentPane().add(loginForm);
 
 		setVisible(true);
 	}
@@ -90,66 +67,49 @@ public class LoginForm extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 
-		JLabel userLabel = new JLabel("User");
+		JLabel userLabel = new JLabel("Email");
 		userLabel.setBounds(10, 10, 80, 25);
 		panel.add(userLabel);
 
-		userText = new JTextField(20);
-		userText.setBounds(100, 10, 160, 25);
+		userText = new JTextField(128);
+		userText.setBounds(100, 10, 275, 25);
 		panel.add(userText);
 
 		JLabel passwordLabel = new JLabel("Password");
 		passwordLabel.setBounds(10, 40, 80, 25);
 		panel.add(passwordLabel);
 
-		passwordText = new JPasswordField(20);
-		passwordText.setBounds(100, 40, 160, 25);
+		passwordText = new JPasswordField(16);
+		passwordText.setBounds(100, 40, 275, 25);
 		panel.add(passwordText);
 
 		JButton registerButton = new JButton();
 		registerButton.setAction(new RegisterAction());
-		registerButton.setBounds(125, 80, 80, 25);
+		registerButton.setBounds(217, 80, 80, 25);
 		panel.add(registerButton);		
 
 		JButton loginButton = new JButton();
 		loginButton.setAction(new LoginAction());
-		loginButton.setBounds(200, 80, 80, 25);
+		loginButton.setBounds(295, 80, 80, 25);
 		panel.add(loginButton);
 		
 		return panel;
 	}
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				initialize();
-				
-				try {
-					if (! SingleInstanceThread.hasAnInstancesRunning()) {
-						LoginForm app = new LoginForm();
-						assert app != null;
-					} else {
-						throw new AboriginalException("There is already an instance running!");
-					}
-				} catch (Exception e) {
-					DesktopUtil.errorMessage("There is an error while trying to run your App:\n\n" + e.getMessage());
-				}
-			}
-		});
-	}
-
-	private static ApplicationContext context;
-	
-	private static void initialize() {
-		context = new AnnotationConfigApplicationContext(AboriginalConfig.class);
-	}
-	
-	public static ApplicationContext getContext() {
-		return context;
-	}
-
 	private void performLogin() {
-		new ViewerForm(this);
+		try {
+			Profile profile = loginService.login((String) cache.get(KEY_BASEURL), userText.getText(), passwordText.getText());
+			cache.put(KEY_PROFILE, profile);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			userText.setText("");
+			userText.requestFocus();
+			
+			passwordText.setText("");
+		}
+		
+		new FormViewer(this);
 		setVisible(false);
 	}
 

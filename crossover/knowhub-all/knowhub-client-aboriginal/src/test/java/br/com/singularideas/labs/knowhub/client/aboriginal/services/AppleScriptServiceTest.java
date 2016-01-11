@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalConfig;
-import br.com.singularideas.labs.knowhub.client.aboriginal.OperationalSystem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( classes = {AboriginalConfig.class} )

@@ -121,8 +121,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", title=" + title + ", description=" + description + ", author=" + author
-				+ ", filename=" + filename + ", channel=" + channel + "]";
+		return title;
 	}
 	
 }

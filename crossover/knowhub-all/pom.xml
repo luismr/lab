@@ -23,6 +23,7 @@
 		<version.guava>19.0</version.guava>
 		<version.miglayout>5.0</version.miglayout>
 		<version.mysql-connector-java>5.1.38</version.mysql-connector-java>
+		<version.icepdf>5.0.7</version.icepdf>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -95,8 +96,6 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${version.mysql-connector-java}</version>
 			</dependency>
-
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
@@ -142,6 +141,16 @@
 				<artifactId>miglayout-swing</artifactId>
 				<version>${version.miglayout}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.icepdf</groupId>
+				<artifactId>icepdf-core</artifactId>
+				<version>${version.icepdf}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.icepdf</groupId>
+				<artifactId>icepdf-viewer</artifactId>
+				<version>${version.icepdf}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
@@ -149,6 +158,14 @@
 			<id>centra new</id>
 			<name>Central New Repository</name>
 			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>icefaces</id>
+			<name>icefaces to pdf viewer</name>
+			<url>http://anonsvn.icesoft.org/repo/maven2/releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

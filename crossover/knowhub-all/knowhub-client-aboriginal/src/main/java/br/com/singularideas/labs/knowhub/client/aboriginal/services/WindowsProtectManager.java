@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.singularideas.labs.knowhub.client.aboriginal.AboriginalException;
-import br.com.singularideas.labs.knowhub.client.aboriginal.ProtectManager;
 
 @Component
 public class WindowsProtectManager implements ProtectManager {
