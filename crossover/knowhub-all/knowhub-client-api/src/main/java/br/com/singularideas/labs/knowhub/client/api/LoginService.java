@@ -21,7 +21,7 @@ public class LoginService {
 	private static final String PATH_LOGIN = "/login";
 	private static final String CONTENT_TYPE = "Content-Type";
 	
-	public static final String DEFAULT_BASEURL = "http://localhost:8080/knowhub-api-rest";
+	public static final String DEFAULT_BASEURL = "http://localhost:8080/knowhub-web";
 
 	@Autowired
 	private Gson gson;
