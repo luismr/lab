@@ -18,7 +18,7 @@ import br.com.singularideas.labs.knowhub.model.ModelException;
 @Repository
 public class SubscriberDAOImpl implements SubscriberDAO {
 
-	private static final String INSERT = "insert into subscribers (name, email, password) values (?,?,?)";
+	private static final String INSERT = "insert into subscribers (name, email, MD5(password)) values (?,?,?)";
 	private static final String SELECT = "select * from subscribers where id = ?";
 	private static final String UPDATE = "update subscribers set name=?, email=?, password=? where id=?";
 	private static final String DELETE = "delete from subscribers where id=?";

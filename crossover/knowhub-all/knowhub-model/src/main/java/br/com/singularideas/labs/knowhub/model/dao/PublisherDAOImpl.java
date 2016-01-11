@@ -18,7 +18,7 @@ import br.com.singularideas.labs.knowhub.model.ModelException;
 @Repository
 public class PublisherDAOImpl implements PublisherDAO {
 
-	private static final String INSERT = "insert into publishers (name, email, contact, password) values (?,?,?,?)";
+	private static final String INSERT = "insert into publishers (name, email, contact, MD5(password)) values (?,?,?,?)";
 	private static final String SELECT = "select * from publishers where id = ?";
 	private static final String UPDATE = "update publishers set name=?, email=?, contact=?, password=? where id=?";
 	private static final String DELETE = "delete from publishers where id=?";
