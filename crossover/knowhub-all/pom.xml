@@ -10,6 +10,7 @@
 		<module>knowhub-common</module>
 		<module>knowhub-model</module>
 		<module>knowhub-api-rest</module>
+		<module>knowhub-client-api</module>
 	</modules>
 	<properties>
 		<version.unirest>1.4.7</version.unirest>
@@ -39,6 +40,16 @@
 			<dependency>
 				<groupId>br.com.singularideas.labs.knowhub</groupId>
 				<artifactId>knowhub-client-aboriginal</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.com.singularideas.labs.knowhub</groupId>
+				<artifactId>knowhub-client-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.com.singularideas.labs.knowhub</groupId>
+				<artifactId>knowhub-api-rest</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
