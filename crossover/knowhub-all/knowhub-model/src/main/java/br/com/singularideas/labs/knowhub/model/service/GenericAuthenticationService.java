@@ -16,7 +16,7 @@ import br.com.singularideas.labs.knowhub.model.dao.SubscriberDAO;
 import br.com.singularideas.labs.knowhub.model.dao.SubscriptionDAO;
 
 @Service
-public class AuthenticationService {
+public class GenericAuthenticationService {
 
 	@Autowired
 	private SubscriberDAO subscriberDAO;

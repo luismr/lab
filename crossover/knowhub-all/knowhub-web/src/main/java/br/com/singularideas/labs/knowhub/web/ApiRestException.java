@@ -1,4 +1,4 @@
-package br.com.singularideas.labs.knowhub.api;
+package br.com.singularideas.labs.knowhub.web;
 
 public class ApiRestException extends RuntimeException {
 

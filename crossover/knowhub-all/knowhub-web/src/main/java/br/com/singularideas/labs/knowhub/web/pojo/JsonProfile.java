@@ -1,14 +1,14 @@
-package br.com.singularideas.labs.knowhub.api.pojo;
+package br.com.singularideas.labs.knowhub.web.pojo;
 
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import br.com.singularideas.labs.knowhub.api.serializer.JsonDateSerializer;
 import br.com.singularideas.labs.knowhub.common.data.Subscriber;
 import br.com.singularideas.labs.knowhub.common.data.Subscription;
 import br.com.singularideas.labs.knowhub.common.vo.Profile;
+import br.com.singularideas.labs.knowhub.web.serializer.JsonDateSerializer;
 
 public class JsonProfile implements Profile {
 

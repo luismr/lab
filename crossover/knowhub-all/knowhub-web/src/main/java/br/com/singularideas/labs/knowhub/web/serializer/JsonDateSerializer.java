@@ -1,4 +1,4 @@
-package br.com.singularideas.labs.knowhub.api.serializer;
+package br.com.singularideas.labs.knowhub.web.serializer;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
