@@ -34,6 +34,7 @@ import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.ApplicationC
 import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.ApplicationWindowListener;
 import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.ItemListModel;
 import br.com.singularideas.labs.knowhub.client.aboriginal.gui.util.SubscriptionComboBoxModel;
+import br.com.singularideas.labs.knowhub.client.api.ApiException;
 import br.com.singularideas.labs.knowhub.client.api.LoginService;
 import br.com.singularideas.labs.knowhub.common.data.Item;
 import br.com.singularideas.labs.knowhub.common.data.Subscription;
@@ -319,14 +320,16 @@ public class FormViewer extends JFrame {
 	}
 	
 	private void openItem(final Item item) {
-		System.out.println(item);
-
-		PdfViewerPanel pdfViewerPanel = new PdfViewerPanel();
-		pdfViewerPanel.openPdf("/tmp/Arduino.Robotics.pdf");
-		centerPanel.removeAll();
-		centerPanel.add(pdfViewerPanel);
-		centerPanel.repaint();
-		centerPanel.revalidate();
+		try {
+			PdfViewerPanel pdfViewerPanel = new PdfViewerPanel();
+			pdfViewerPanel.openPdfByUrl((String) cache.get(FormLogin.KEY_BASEURL) + "/api/download/item/" + item.getId());
+			centerPanel.removeAll();
+			centerPanel.add(pdfViewerPanel);
+			centerPanel.repaint();
+			centerPanel.revalidate();
+		} catch (Exception e) {
+			throw new ApiException(e.getMessage(), e);
+		}
 	}
 
 }

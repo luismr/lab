@@ -1,5 +1,7 @@
 package br.com.singularideas.labs.knowhub.client.aboriginal.gui.pdf;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
@@ -36,6 +38,10 @@ public class PdfViewerPanel extends JPanel {
 	
 	public void openPdf(final String path) {
 		controller.openDocument(path);
+	}
+
+	public void openPdfByUrl(final String url) throws MalformedURLException {
+		controller.openDocument(new URL(url));
 	}
 
 }

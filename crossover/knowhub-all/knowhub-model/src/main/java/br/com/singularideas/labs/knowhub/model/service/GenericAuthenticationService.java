@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.singularideas.labs.knowhub.common.crypto.CryptoUtils;
 import br.com.singularideas.labs.knowhub.common.data.Subscriber;
 import br.com.singularideas.labs.knowhub.common.data.Subscription;
 import br.com.singularideas.labs.knowhub.common.vo.Profile;
@@ -31,7 +30,7 @@ public class GenericAuthenticationService {
 		try {
 			Subscriber subscriber = subscriberDAO.getByEmail(email);
 			
-			if (! password.equals(CryptoUtils.crypto(subscriber.getPassword()))) {
+			if (! subscriber.getPassword().equals(password)) {
 				throw new ModelException();
 			}
 			

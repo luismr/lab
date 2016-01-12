@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import br.com.singularideas.labs.knowhub.common.crypto.CryptoUtils;
 import br.com.singularideas.labs.knowhub.common.data.Publisher;
 import br.com.singularideas.labs.knowhub.model.ModelException;
 
@@ -20,7 +19,7 @@ public class PublisherRowMapper implements RowMapper<Publisher> {
 			p.setId(rs.getLong("id"));
 			p.setName(rs.getString("name"));
 			p.setContact(rs.getString("contact"));
-			p.setPassword(CryptoUtils.crypto(rs.getString("password")));
+			p.setPassword(rs.getString("password"));
 			p.setEmail(rs.getString("email"));
 		} catch (Exception e) {
 			throw new ModelException(e.getMessage(), e);
