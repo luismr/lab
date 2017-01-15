@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.springframework.social:spring-social-facebook:1.1.0.BUILD-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-facebook/1.1.0.BUILD-SNAPSHOT/spring-social-facebook-1.1.0.BUILD-20140430.081517-672.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-facebook/1.1.0.BUILD-SNAPSHOT/spring-social-facebook-1.1.0.BUILD-20140430.081517-672-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-facebook/1.1.0.BUILD-SNAPSHOT/spring-social-facebook-1.1.0.BUILD-20140430.081517-672-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

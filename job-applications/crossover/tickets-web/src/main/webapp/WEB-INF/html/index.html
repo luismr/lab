@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	layout:decorator="layout.html">
+<head>
+</head>
+<body>
+<div layout:fragment="body">
+
+<div class="page-header">
+    <h1 th:text="#{label.homepage.title} + ' ' + ${#authentication.principal.firstName} + ' ' + ${#authentication.principal.lastName}"></h1>
+</div>
+
+<div th:switch="${#authentication.principal.role}">
+	<p th:case="${T(com.luismachadoreis.tickets.web.model.Role).ROLE_ADMIN}">Admin</p>
+	<p th:case="${T(com.luismachadoreis.tickets.web.model.Role).ROLE_STAFF}">Staff</p>
+	<p th:case="${T(com.luismachadoreis.tickets.web.model.Role).ROLE_USER}">
+		<h2 th:text="#{label.homepage.user.title}"></h2>
+		<table class="table">
+			<thead>
+			<tr>
+				<th th:text="#{table.header.label.id}">Id</th>
+				<th th:text="#{table.header.label.flight}">Flight</th>
+				<th th:text="#{table.header.label.date}">Date</th>
+				<th th:text="#{table.header.label.actions}">Actions</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr th:if="${tickets.empty}">
+				<td colspan="3" th:text="#{table.header.label.norows}">no tickets</td>
+			</tr>
+			<tr th:each="ticket : ${tickets}">
+				<td th:text="${ticket.id}">id</td>
+				<td th:text="${ticket.flight.route.name}">name</td>
+				<td th:text="${ticket.flight.takeOff}">1</td>
+				<td>&nbsp;</td>
+			</tr>
+			</tbody>
+		</table>
+		<a href="/tickets/search" th:href="@{/tickets/search}" class="btn btn-large btn-primary" th:text="#{table.footer.button.find}">Find a Flight</a>
+	</p>
+</div>
+
+</div>
+</body>
+</html>

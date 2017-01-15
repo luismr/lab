@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	layout:decorator="layout.html">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/social-buttons-3.css" th:href="@{/static/css/social-buttons-3.css}"/>
+</head>
+<body >
+<div layout:fragment="body">
+<div class="page-header">
+    <h1 th:text="#{label.user.login.page.title}">Login</h1>
+</div>
+    <div class="panel panel-default" sec:authorize="isAnonymous()">
+        <div class="panel-body">
+            <h2 th:text="#{label.login.form.title}">Login by using your user account</h2>
+                <div class="alert alert-danger alert-dismissable" th:if="${param.error} != null ? ${param.error[0] eq 'bad_credentials'}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <span th:text="#{text.login.page.login.failed.error}">Login failed!</span>
+                </div>
+            <form action="/login/authenticate" th:action="@{/login/authenticate}" method="POST" role="form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="row">
+                    <div id="form-group-email" class="form-group col-lg-4">
+                        <label class="control-label" for="user-email" th:text="#{label.user.email}+':'">Email:</label>
+                        <input id="user-email" name="username" type="text" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div id="form-group-password" class="form-group col-lg-4">
+                        <label class="control-label" for="user-password" th:text="#{label.user.password}+':'">Password:</label>
+                        <input id="user-password" name="password" type="password" class="form-control"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-4">
+                        <button type="submit" class="btn btn-default" th:text="#{label.user.login.submit.button}+':'">Login</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <a href="/user/register" th:href="@{/user/register}"  th:text="#{label.navigation.registration.link}">Create user account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" sec:authorize="isAnonymous()">
+        <div class="panel-body">
+            <h2 th:text="#{label.social.sign.in.title}">Sign in by using social provider</h2>
+            <div class="row social-button-row">
+                <div class="col-lg-4">
+                    <a href="/auth/facebook" th:href="@{/auth/facebook}"><button class="btn btn-facebook" th:inline="text"><i class="icon-facebook"></i> | [[#{label.facebook.sign.in.button}]]</button></a>
+                </div>
+            </div>
+            <div class="row social-button-row">
+                <div class="col-lg-4">
+                    <a href="/auth/twitter" th:href="@{/auth/twitter}"><button class="btn btn-twitter" th:inline="text"><i class="icon-twitter"></i> | [[#{label.twitter.sign.in.button}]]</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p sec:authorize="isAuthenticated()" th:text="#{text.login.page.authenticated.user.help}">You cannot login because you are already logged in.</p>
+</div>
+</body>
+</html>

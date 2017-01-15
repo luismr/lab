@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.springframework.social:spring-social-twitter:1.1.0.BUILD-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-twitter/1.1.0.BUILD-SNAPSHOT/spring-social-twitter-1.1.0.BUILD-20150724.081531-1048.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-twitter/1.1.0.BUILD-SNAPSHOT/spring-social-twitter-1.1.0.BUILD-20150724.081531-1048-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/social/spring-social-twitter/1.1.0.BUILD-SNAPSHOT/spring-social-twitter-1.1.0.BUILD-20150724.081531-1048-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

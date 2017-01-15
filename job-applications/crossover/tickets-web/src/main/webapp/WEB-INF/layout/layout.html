@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title layout:title-pattern="$DECORATOR_TITLE"
+	th:text="#{flyaway.tickets.normal.title}">foo</title>
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"
+	th:href="@{/static/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	href="/static/css/bootstrap-theme.css"
+	th:href="@{/static/css/bootstrap-theme.css}" />
+<link rel="stylesheet" type="text/css"
+	href="/static/css/font-awesome.css"
+	th:href="@{/static/css/font-awesome.css}" />
+<link rel="stylesheet" type="text/css" href="/static/css/style.css"
+	th:href="@{/static/css/style.css}" />
+<script type="text/javascript" src="/static/js/vendor/jquery-2.0.3.js"
+	th:src="@{/static/js/vendor/jquery-2.0.3.js}"></script>
+<script type="text/javascript" src="/static/js/vendor/bootstrap.js"
+	th:src="@{/static/js/vendor/bootstrap.js}"></script>
+</head>
+<body>
+	<div class="page">
+		<div class="navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-ex1-collapse">
+					<span class="sr-only" th:text="#{label.navigation.toggle.navigation.button}">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<span class="navbar-brand" th:text="#{flyaway.tickets.normal.title}">Tickets</span>
+			</div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav navbar-left">
+						<li sec:authorize="isAuthenticated()"><a th:href="@{/}" href="/" th:text="#{label.navigation.home.link}">Home</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+						<li sec:authorize="isAnonymous()"><a href="/user/register"
+							th:href="@{/user/register}" th:text="#{label.navigation.registration.link}">Create user account</a></li>
+						<li sec:authorize="isAuthenticated()">
+							<form action="/logout" th:action="@{/logout}"
+								method="POST">
+								<input type="hidden" th:type="hidden" th:name="${_csrf.parameterName}"
+									th:value="${_csrf.token}" />
+								<button type="submit" class="btn btn-default navbar-btn" th:text="#{label.navigation.logout.link}">Logout</button>
+							</form>
+						</li>
+				</ul>
+					<p sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right navbar-text sign-in-text">
+							<i class="icon-facebook-sign" th:if="${#authentication.principal.socialSignInProvider} == 'FACEBOOK'"></i>
+							<i class="icon-twitter-sign" th:if="${#authentication.principal.socialSignInProvider} == 'TWITTER'"></i>
+							<span  th:text="#{label.navigation.signed.in.as.text}" th:if="${#authentication.principal.socialSignInProvider} != null">Signed in as</span>
+							<span sec:authentication="principal.username"></span>
+					</p>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<div class="content">
+			<div id="view-holder">
+				<div layout:fragment="body" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>
